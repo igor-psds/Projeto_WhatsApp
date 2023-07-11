@@ -1,23 +1,43 @@
-import logo from './logo.svg';
 import './App.css';
+import CC_Image from './assets/images/logo_profissao-programador.jpg';
+import Send_Image from './assets/images/send.png';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <div className='background'></div>
+      <div className='chat-container'>
+        <div className='chat-contacts'>
+          <div className='chat-options'></div>
+          <div className='chat-item'>
+            <img className='image-profile' src={CC_Image} alt='' />
+            <div className='title-chat-container'>
+              <span className='title-message'>Networking Profissão Programador</span>
+              <span className='last-message'>Paulo: Bom dia!</span>
+            </div>
+          </div>
+        </div>
+
+        <div className='chat-messages'>
+          <div className='chat-options'>
+            <div className='chat-item'>
+              <img className='image-profile' src={CC_Image} alt='' />
+              <div className='title-chat-container'>
+                <span className='title-message'>Networking Profissão Programador</span>
+                <span className='last-message'>Shepard, Liara, Garrus, Joker, EDI,...</span>
+              </div>
+            </div>
+          </div>
+
+          <div className='chat-messages-area'></div>
+
+          <div className='chat-input-area'>
+            <input className='chat-input' placeholder='Mensagem' />
+            <img className='send-message-icon' src={Send_Image} alt='' />
+          </div>
+        </div>
+
+      </div>
     </div>
   );
 }
