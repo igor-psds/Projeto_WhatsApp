@@ -36,7 +36,7 @@ function App() {
   if(!joined) {
     return(
       <div>
-        <span>Digite sesu nome</span>
+        <span>Digite seu nome</span>
         <input value={name} onChange={(e) => setName(e.target.value)} />
         <button onClick={() => handleJoin()}>Entrar</button>
       </div>
@@ -53,7 +53,9 @@ function App() {
             <img className='image-profile' src={CC_Image} alt='' />
             <div className='title-chat-container'>
               <span className='title-message'>Networking Profissão Programador</span>
-              <span className='last-message'>Paulo: Bom dia!</span>
+              <span className='last-message'>
+                {messages.length? `${messages[messages.length - 1].name}: ${messages[messages.length - 1].message}` : ''}
+              </span>
             </div>
           </div>
         </div>
@@ -75,7 +77,14 @@ function App() {
 
           <div className='chat-messages-area'>
             {messages.map((message, index) => (
-              <span key={index} >{message.name? `${message.name}: ` : ''} {message.message}</span>
+              <div className={message.name === name? 'user-container-message right' : 'user-container-message left'}>
+                  <span
+                    className={message.name === name? 'user-my-message' : 'user-other-message'}
+                    key={index}
+                  >
+                    {message.name? `${message.name}: ` : ''} {message.message}
+                  </span>
+              </div>
             ))}
           </div>
 
