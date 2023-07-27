@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import './App.css';
+import './login.css';
 import CC_Image from './assets/images/logo_profissao-programador.jpg';
 import Send_Image from './assets/images/send.png';
 import socket from 'socket.io-client';
@@ -35,10 +36,22 @@ function App() {
 
   if(!joined) {
     return(
-      <div>
-        <span>Digite seu nome</span>
-        <input value={name} onChange={(e) => setName(e.target.value)} />
-        <button onClick={() => handleJoin()}>Entrar</button>
+      <div className='container'>
+        <div className='background'></div>
+        <div className='login-container'>
+          <h2>Digite seu nome</h2>
+          <input
+            className='login-input'
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleJoin()
+              }
+            }}
+          />
+          <button className='login-buttom' onClick={() => handleJoin()}>Entrar</button>
+        </div>
       </div>
     )
   }
@@ -66,7 +79,7 @@ function App() {
               <img className='image-profile' src={CC_Image} alt='' />
               <div className='title-chat-container'>
                 <span className='title-message'>Networking Profissão Programador</span>
-                <span className='last-message'>
+                <span className='last-message group-users'>
                   {users.map((user, index) => (
                     <span>{user.name}{index + 1 < users.length? ', ' : ''}</span>
                   ))}
