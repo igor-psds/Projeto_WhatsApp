@@ -115,9 +115,17 @@
 }
 
 .user-other-message{
+  display: flex;
+  flex-direction: column;
   padding: 10px;
   border-radius: 5px;
   background-color: #fff;
+}
+
+.sender-name{
+  font-size: 14px;
+  font-weight: 640;
+  color: blue;
 }
 
 .chat-input-area {

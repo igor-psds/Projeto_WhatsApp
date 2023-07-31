@@ -7,6 +7,9 @@ import socket from 'socket.io-client';
 
 const io = socket('http://localhost:4000');
 
+const colors = ['#0202020', '#00C569', '#00FF00', '#00C59F']
+const userColor = colors[Math.floor( Math.random() * colors.length)];
+
 function App() {
   const [name, setName] = useState("");
   const [joined, setJoined] = useState(false);
@@ -95,7 +98,13 @@ function App() {
                     className={message.name === name? 'user-my-message' : 'user-other-message'}
                     key={index}
                   >
-                    {message.name? `${message.name}: ` : ''} {message.message}
+                    <span
+                      className='sender-name'
+                      style={{color: `${userColor}`}}
+                    >
+                      {message.name === name? '' : `${message.name}`}
+                    </span>
+                    {message.message}
                   </span>
               </div>
             ))}
@@ -107,6 +116,11 @@ function App() {
               placeholder='Mensagem'
               value={message}
               onChange={(e) => setMessage(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleMessage();
+                }
+              }}
             />
             <img className='send-message-icon' src={Send_Image} alt='' onClick={() => handleMessage()} />
           </div>
