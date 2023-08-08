@@ -4,18 +4,20 @@ import './login.css';
 import CC_Image from './assets/images/logo_profissao-programador.jpg';
 import Send_Image from './assets/images/send.png';
 import socket from 'socket.io-client';
+import { useGlobalContext } from './contexts/globalContext';
 
-const io = socket('http://localhost:4000');
+// const io = socket('http://localhost:4000');
 
-const colors = ['#0202020', '#00C569', '#00FF00', '#00C59F']
+const colors = ['#0202020', '#00C569', '#00FF00', '#00C59F', '#4A90E2', '#F39C12', '#27AE60']
 const userColor = colors[Math.floor( Math.random() * colors.length)];
 
 function App() {
-  const [name, setName] = useState("");
-  const [joined, setJoined] = useState(false);
-  const [users, setUsers] = useState([]);
-  const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
+  const {io, name, setName, joined, setJoined, users, setUsers, message, setMessage, messages, setMessages} = useGlobalContext();
+  // const [name, setName] = useState("");
+  // const [joined, setJoined] = useState(false);
+  // const [users, setUsers] = useState([]);
+  // const [message, setMessage] = useState("");
+  // const [messages, setMessages] = useState([]);
   console.log(messages)
 
   useEffect(() => {
