@@ -13,10 +13,21 @@ function GlobalProvider({ children }) {
     const [message, setMessage] = useState("");
     const [messages, setMessages] = useState([]);
 
+    const colors = ['#0202020', '#00C569', '#00FF00', '#00C59F', '#4A90E2', '#F39C12', '#27AE60'];
+    const userColor = {}
+
     // useEffect(() => {
     //     io.on("users", (users) => {setUsers(users)});
     //     io.on("message", (message) => setMessages((messages) => [...messages, message]));
     // }, []);
+
+    function getUserColor(userId) {
+        if(!userColor[userId]) {
+            const colorIndex = Object.keys(userColor).length % colors.length;
+            userColor[userId] = colors[colorIndex];
+        }
+        return userColor[userId];
+    }
 
     const state = {
         io,
@@ -30,6 +41,7 @@ function GlobalProvider({ children }) {
         setMessage,
         messages,
         setMessages,
+        getUserColor,
     };
 
     return (

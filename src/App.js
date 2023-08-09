@@ -1,36 +1,27 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import './App.css';
-import './login.css';
+import Login from './pages/login/login';
 import CC_Image from './assets/images/logo_profissao-programador.jpg';
 import Send_Image from './assets/images/send.png';
-import socket from 'socket.io-client';
 import { useGlobalContext } from './contexts/globalContext';
 
-// const io = socket('http://localhost:4000');
-
-const colors = ['#0202020', '#00C569', '#00FF00', '#00C59F', '#4A90E2', '#F39C12', '#27AE60']
-const userColor = colors[Math.floor( Math.random() * colors.length)];
-
 function App() {
-  const {io, name, setName, joined, setJoined, users, setUsers, message, setMessage, messages, setMessages} = useGlobalContext();
-  // const [name, setName] = useState("");
-  // const [joined, setJoined] = useState(false);
-  // const [users, setUsers] = useState([]);
-  // const [message, setMessage] = useState("");
-  // const [messages, setMessages] = useState([]);
+  const {
+    io,
+    name,
+    joined,
+    users,
+    message,
+    setMessage,
+    messages,
+    setMessages,
+    getUserColor
+  } = useGlobalContext();
   console.log(messages)
 
   useEffect(() => {
-    io.on("users", (users) => {setUsers(users)});
     io.on("message", (message) => setMessages((messages) => [...messages, message]));
   }, [])
-
-  const handleJoin = () => {
-    if(name){
-      io.emit("join", name);
-      setJoined(true)
-    }
-  }
 
   const handleMessage = () => {
     if(message) {
@@ -41,23 +32,7 @@ function App() {
 
   if(!joined) {
     return(
-      <div className='container'>
-        <div className='background'></div>
-        <div className='login-container'>
-          <h2>Digite seu nome</h2>
-          <input
-            className='login-input'
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleJoin()
-              }
-            }}
-          />
-          <button className='login-buttom' onClick={() => handleJoin()}>Entrar</button>
-        </div>
-      </div>
+      <Login />
     )
   }
 
@@ -102,7 +77,7 @@ function App() {
                   >
                     <span
                       className='sender-name'
-                      style={{color: `${userColor}`}}
+                      style={{color: `${getUserColor(message.name)}`}}
                     >
                       {message.name === name? '' : `${message.name}`}
                     </span>
