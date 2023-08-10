@@ -20,6 +20,10 @@
     cursor: pointer;
 }
 
+.chat-selected {
+    background-color: #F0F2F5;
+}
+
 .title-chat-container {
     display: flex;
     flex-direction: column;
@@ -30,6 +34,16 @@
     width: 60px;
     height: auto;
     border-radius: 50%;
+}
+
+.user-image {
+    width: 60px;
+    height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: larger;
 }
 
 .title-message {

@@ -2,10 +2,11 @@ import './App.css';
 import Login from './pages/login/login';
 import Contacts from './components/contacts/contacts';
 import Messages from './components/messages/messages';
+import PrivateChat from './components/privatechats/privatechats';
 import { useGlobalContext } from './contexts/globalContext';
 
 function App() {
-  const { joined } = useGlobalContext();
+  const { joined, isPrivateChat } = useGlobalContext();
 
 
 
@@ -22,7 +23,7 @@ function App() {
         <Contacts />
 
         <div className='chat-messages'>
-          <Messages />
+          {isPrivateChat ? <PrivateChat /> : <Messages />}
         </div>
 
       </div>

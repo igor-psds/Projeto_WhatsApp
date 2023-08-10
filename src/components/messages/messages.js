@@ -13,16 +13,19 @@ function Messages() {
         setMessage,
         messages,
         setMessages,
-        getUserColor
+        getUserColor,
     } = useGlobalContext();
 
     useEffect(() => {
         io.on("message", (message) => setMessages((messages) => [...messages, message]));
+        io.on("privateMessage", ({sender, message}) => {
+            setMessages((messages) => [...messages, {name: sender.name, message}]);
+        })
     }, []);
     
     function handleMessage() {
         if(message) {
-            io.emit("message", {message, name});
+            io.emit("message", { message, name });
             setMessage("");
         }
     }
@@ -45,7 +48,7 @@ function Messages() {
 
             <div className='chat-messages-area'>
                 {messages.map((message, index) => (
-                    <div className={message.name === name? 'user-container-message right' : 'user-container-message left'}>
+                    <div className={`user-container-message ${message.name === name? 'right' : 'left'}`}>
                         <span
                             className={message.name === name? 'user-my-message' : 'user-other-message'}
                             key={index}
@@ -74,7 +77,7 @@ function Messages() {
                         }
                     }}
                 />
-                <img className='send-message-icon' src={Send_Image} alt='' onClick={() => handleMessage()} />
+                <img className='send-message-icon' src={Send_Image} alt='' onClick={handleMessage} />
             </div>
         </>
     )
