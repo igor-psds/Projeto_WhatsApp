@@ -18,9 +18,6 @@ function Messages() {
 
     useEffect(() => {
         io.on("message", (message) => setMessages((messages) => [...messages, message]));
-        io.on("privateMessage", ({sender, message}) => {
-            setMessages((messages) => [...messages, {name: sender.name, message}]);
-        })
     }, []);
     
     function handleMessage() {

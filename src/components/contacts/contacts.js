@@ -4,7 +4,18 @@ import CC_Image from '../../assets/images/logo_profissao-programador.jpg'
 import './styles.css';
 
 function Contacts() {
-    const { io, name, users, messages, getUserColor, activeChat, setActiveChat, isPrivateChat, setIsPrivateChat } = useGlobalContext();
+    const {
+        io, 
+        name,
+        users,
+        messages,
+        getUserColor,
+        activeChat,
+        setActiveChat,
+        isPrivateChat,
+        setIsPrivateChat,
+        privateMessages
+    } = useGlobalContext();
 
     function changeChat(chatId) {
         setActiveChat(chatId)
@@ -40,7 +51,7 @@ function Contacts() {
                     <div className='title-chat-container'>
                         <span className='title-message'>{user.name === name? 'You' : `${user.name}`}</span>
                         <span className='last-message'>
-                            {messages.length? `${messages[messages.length - 1].name}: ${messages[messages.length - 1].message}` : ''}
+                            {privateMessages.length? `${privateMessages[privateMessages.length - 1].name}: ${privateMessages[privateMessages.length - 1].message}` : ''}
                         </span>
                     </div>
                 </div>

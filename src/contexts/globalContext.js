@@ -14,6 +14,7 @@ function GlobalProvider({ children }) {
     const [messages, setMessages] = useState([]);
     const [isPrivateChat, setIsPrivateChat] = useState(false);
     const [activeChat, setActiveChat] = useState(null);
+    const [privateMessages, setPrivateMessages] = useState([]);
 
     const colors = ['#9f1212', '#00C569', '#00FF00', '#00C59F', '#4A90E2', '#F39C12', '#27AE60'];
     const userColor = {}
@@ -47,7 +48,9 @@ function GlobalProvider({ children }) {
         activeChat,
         setActiveChat,
         isPrivateChat,
-        setIsPrivateChat
+        setIsPrivateChat,
+        privateMessages,
+        setPrivateMessages
     };
 
     return (

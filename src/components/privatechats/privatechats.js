@@ -4,36 +4,43 @@ import Send_Image from '../../assets/images/send.png';
 import { useGlobalContext } from '../../contexts/globalContext';
 
 function PrivateChat() {
-    const { io, name} = useGlobalContext();
+    const { io, name, users, activeChat, privateMessages, setPrivateMessages } = useGlobalContext();
     const [inputMessage, setInputMessage] = useState('');
-    const [privateMessages, setPrivateMessages] = useState([]);
 
     useEffect(() => {
         io.on("privateMessage", (message) => {
-            // Handle receiving private messages and update state.
-            setPrivateMessages((prevMessages) => [...prevMessages, message]);
+            console.log("Received private message:", message);
+            console.log("THE", message.sender);
+            console.log("MESSAGE", message.recipient);
+            if(message.sender.id === activeChat || message.recipient.id === activeChat) {
+                console.log("Updating private messages state.");
+                // Handle receiving private messages and update state.
+                setPrivateMessages((privateMessages) => [...privateMessages, message]);
+            }
+            
         });
-    }, [io]);
+    }, [io, activeChat]);
 
     function sendPrivateMessage() {
-        if(inputMessage.trim() !== '') {
-            const privateMessage = {
-                sender: name,
-                recipient: recipient.name,
-                message: inputMessage,
-            };
-
+        if(inputMessage) {
             // Emit a socket event for private messages
-            io.emit("privateMessage", privateMessage);
+            io.emit("privateMessage", { message: inputMessage, senderName: name, recipientId: activeChat });
 
             // Update state
-            setPrivateMessages((prevMessages) => [...prevMessages, privateMessage]);
+            //setPrivateMessages((privateMessages) => [...privateMessages, privateMessage]);
 
             // Clear input
             setInputMessage('');
         };
 
     }
+
+    useEffect(() => {
+        io.on('privateMessage', (message) => {
+            console.log('Private message received in frontend:', message);
+            // Handle the message and update state as needed
+        });
+    }, []);
     
     return(
         <div className='private-chat'>
@@ -71,7 +78,7 @@ function PrivateChat() {
                         }
                     }}
                 />
-                <img className='send-message-icon' src={Send_Image} alt='' onClick={sendPrivateMessage}/>
+                <img className='send-message-icon' src={Send_Image} alt='' onClick={console.log(privateMessages)}/>
             </div>
         </div>
     )
