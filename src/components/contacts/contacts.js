@@ -3,59 +3,81 @@ import { useGlobalContext } from '../../contexts/globalContext';
 import CC_Image from '../../assets/images/logo_profissao-programador.jpg'
 import './styles.css';
 
-function Contacts() {
+const rooms = [
+    "Networking Profissão Programador"
+];
+
+function Contacts(props) {
     const {
-        io, 
-        name,
         users,
         messages,
-        getUserColor,
-        activeChat,
-        setActiveChat,
-        isPrivateChat,
-        setIsPrivateChat,
-        privateMessages
     } = useGlobalContext();
 
-    function changeChat(chatId) {
-        setActiveChat(chatId)
-        setIsPrivateChat(true);
-        console.log('trocou de chat')
-    }
-
-    function groupChat(chatId) {
-        setActiveChat(chatId)
-        setIsPrivateChat(false);
-        console.log('trocou de chat')
-    }
-
-    return(
-        <div className='chat-contacts'>
-            <div className='chat-options'></div>
-            <div className={`chat-item ${isPrivateChat ? '' : 'chat-selected'}`} onClick={() => groupChat()}>
+    function renderRooms(room) {
+        const currentChat = {
+            chatName: room,
+            isChannel: true,
+            receiverId: ""
+        }
+        return(
+            <div className='chat-item' onClick={() => props.toggleChat(currentChat)} key={room}>
                 <img className='image-profile' src={CC_Image} alt='' />
                 <div className='title-chat-container'>
-                    <span className='title-message'>Networking Profissão Programador</span>
+                    <span className='title-message'>{room}</span>
                     <span className='last-message'>
                         {messages.length? `${messages[messages.length - 1].name}: ${messages[messages.length - 1].message}` : ''}
                     </span>
                 </div>
             </div>
-            {users.map((user, index) => (
-                <div
-                    className={`chat-item ${activeChat === user.id? 'chat-selected' : ''}`}
-                    key={index}
-                    onClick={() => changeChat(user.id)}
-                >
-                    <div className='user-image' style={{backgroundColor: `${getUserColor(user.name)}`}}>{user.name[0]}</div>
+        )
+    }
+
+    function renderUser(user) {
+        if(user.id === props.yourId) {
+            return(
+                <div className='chat-item' onClick={myChat} key={user.id}>
+                    <img className='image-profile' src={CC_Image} alt='' />
                     <div className='title-chat-container'>
-                        <span className='title-message'>{user.name === name? 'You' : `${user.name}`}</span>
+                        <span className='title-message'>You: {user.name}</span>
                         <span className='last-message'>
-                            {privateMessages.length? `${privateMessages[privateMessages.length - 1].name}: ${privateMessages[privateMessages.length - 1].message}` : ''}
+                            {messages.length? `${messages[messages.length - 1].name}: ${messages[messages.length - 1].message}` : ''}
                         </span>
                     </div>
                 </div>
-            ))}
+            );
+        }
+        const currentChat = {
+            chatName: user.name,
+            isChannel: false,
+            receiverId: user.id
+        }
+
+        function myChat(){
+            console.log("You")
+        }
+
+        function changeChat(){
+            console.log("mudou de chat")
+            props.toggleChat(currentChat)
+        }
+        return(
+            <div className='chat-item' onClick={() => changeChat()} key={user.id}>
+                <img className='image-profile' src={CC_Image} alt='' />
+                <div className='title-chat-container'>
+                    <span className='title-message'>{user.name}</span>
+                    <span className='last-message'>
+                        {messages.length? `${messages[messages.length - 1].name}: ${messages[messages.length - 1].message}` : ''}
+                    </span>
+                </div>
+            </div>
+        )
+    }
+
+    return(
+        <div className='chat-contacts'>
+            <div className='chat-options'></div>
+            {rooms.map(renderRooms)}
+            {users.map(renderUser)}
         </div>
     )
 }

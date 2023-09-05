@@ -6,8 +6,10 @@ import './styles.css';
 
 function Messages() {
     const {
-        io,
+        ioSocket,
         name,
+        currentChat,
+        connectedRooms,
         users,
         message,
         setMessage,
@@ -17,12 +19,12 @@ function Messages() {
     } = useGlobalContext();
 
     useEffect(() => {
-        io.on("message", (message) => setMessages((messages) => [...messages, message]));
+        ioSocket.on("message", (message) => setMessages((messages) => [...messages, message]));
     }, []);
     
     function handleMessage() {
         if(message) {
-            io.emit("message", { message, name });
+            ioSocket.emit("message", { message, name });
             setMessage("");
         }
     }
@@ -44,22 +46,19 @@ function Messages() {
             </div>
 
             <div className='chat-messages-area'>
-                {messages.map((message, index) => (
-                    <div className={`user-container-message ${message.name === name? 'right' : 'left'}`}>
+                <div className={`user-container-message ${message.name === name? 'right' : 'left'}`}>
+                    <span
+                        className={message.name === name? 'user-my-message' : 'user-other-message'}
+                    >
                         <span
-                            className={message.name === name? 'user-my-message' : 'user-other-message'}
-                            key={index}
+                            className='sender-name'
+                            style={{color: `${getUserColor(message.name)}`}}
                         >
-                            <span
-                                className='sender-name'
-                                style={{color: `${getUserColor(message.name)}`}}
-                            >
-                                {message.name === name? '' : `${message.name}`}
-                            </span>
-                            {message.message}
+                            {message.name === name? '' : `${message.name}`}
                         </span>
-                    </div>
-                ))}
+                        {message.message}
+                    </span>
+                </div>
             </div>
 
             <div className='chat-input-area'>

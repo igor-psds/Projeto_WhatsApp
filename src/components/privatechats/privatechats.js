@@ -8,6 +8,10 @@ function PrivateChat() {
     const [inputMessage, setInputMessage] = useState('');
 
     useEffect(() => {
+        setInputMessage("");
+    }, []);
+
+    useEffect(() => {
         io.on("privateMessage", (message) => {
             console.log("Received private message:", message);
             console.log("THE", message.sender);

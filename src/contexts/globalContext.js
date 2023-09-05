@@ -1,17 +1,25 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useRef } from "react";
 import socket from "socket.io-client";
 
 const GlobalContext = createContext();
 
 function GlobalProvider({ children }) {
 
-    const io = socket('http://localhost:4000');
+    const ioSocket = socket('http://localhost:4000');
+
+    const initialMessageState = {
+        padrao: []
+    }
 
     const [name, setName] = useState('');
     const [joined, setJoined] = useState(false);
+    const [currentChat, setCurrentChat] = useState({ isChannel: true, chatName: "Networking Profissão Programador", receiverId: ""});
+    const [connectedRooms, setConnectedRooms] = useState(["Networking Profissão Programador"]);
     const [users, setUsers] = useState([]);
+    const [messages, setMessages] = useState(initialMessageState);
     const [message, setMessage] = useState("");
-    const [messages, setMessages] = useState([]);
+    const socketRef = useRef();
+    const [nameInputValid, setNameInputValid] = useState(true);
     const [isPrivateChat, setIsPrivateChat] = useState(false);
     const [activeChat, setActiveChat] = useState(null);
     const [privateMessages, setPrivateMessages] = useState([]);
@@ -33,11 +41,15 @@ function GlobalProvider({ children }) {
     }
 
     const state = {
-        io,
+        ioSocket,
         name,
         setName,
         joined,
         setJoined,
+        currentChat,
+        setCurrentChat,
+        connectedRooms,
+        setConnectedRooms,
         users,
         setUsers,
         message,
@@ -45,12 +57,15 @@ function GlobalProvider({ children }) {
         messages,
         setMessages,
         getUserColor,
-        activeChat,
-        setActiveChat,
-        isPrivateChat,
-        setIsPrivateChat,
-        privateMessages,
-        setPrivateMessages
+        socketRef,
+        nameInputValid,
+        setNameInputValid
+        // activeChat,
+        // setActiveChat,
+        // isPrivateChat,
+        // setIsPrivateChat,
+        // privateMessages,
+        // setPrivateMessages,
     };
 
     return (

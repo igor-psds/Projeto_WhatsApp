@@ -1,25 +1,31 @@
 import React, { useEffect, useState} from "react";
 import { useGlobalContext } from '../../contexts/globalContext';
 import './styles.css';
+import socket from "socket.io-client";
 
-function Login() {
+function Login(props) {
 
-    const { io, name, setName, setJoined, setUsers} = useGlobalContext();
+    const { ioSocket, name, setName, setJoined, setUsers, socketRef, nameInputValid} = useGlobalContext();
     const [inputValid, setInputValid] = useState(true);
 
-    useEffect(() => {
-        io.on("users", (users) => {setUsers(users)});
-    }, [])
+    // useEffect(() => {
+    //     ioSocket.on("users", (users) => {
+    //         users.forEach(user => {
+    //             user.self = user.id === socket.id;
+    //         });
+    //         setUsers(users);
+    //     });
+    // }, [])
 
-    const handleJoin = () => {
-        if(name.trim() !== ""){
-          io.emit("join", name);
-          setJoined(true);
-          setInputValid(true);
-        } else {
-            setInputValid(false);
-        }
-    }
+    // const handleJoin = () => {
+    //     if(name.trim() !== ""){
+    //       io.emit("join", name);
+    //       setJoined(true);
+    //       setInputValid(true);
+    //     } else {
+    //         setInputValid(false);
+    //     }
+    // }
 
     return (
         <div className="container">
@@ -32,12 +38,12 @@ function Login() {
                     onChange={(e) => setName(e.target.value)}
                     onKeyDown={(e) => {
                         if(e.key === "Enter") {
-                            handleJoin();
+                            props.connect;
                         }
                     }}
                 />
-                <button className="login-buttom" onClick={() => handleJoin()}>Entrar</button>
-                {!inputValid && <p className="error-message">Please enter valid name</p>}
+                <button className="login-buttom" onClick={props.connect}>Entrar</button>
+                {!nameInputValid && <p className="error-message">Please enter valid name</p>}
             </div>
         </div>
     )
