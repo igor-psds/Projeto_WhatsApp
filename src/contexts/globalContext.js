@@ -13,8 +13,8 @@ function GlobalProvider({ children }) {
 
     const [name, setName] = useState('');
     const [joined, setJoined] = useState(false);
-    const [currentChat, setCurrentChat] = useState({ isChannel: true, chatName: "Networking Profissão Programador", receiverId: ""});
-    const [connectedRooms, setConnectedRooms] = useState(["Networking Profissão Programador"]);
+    const [currentChat, setCurrentChat] = useState({ isChannel: true, chatName: "padrao", receiverId: ""});
+    const [connectedRooms, setConnectedRooms] = useState(["padrao"]);
     const [users, setUsers] = useState([]);
     const [messages, setMessages] = useState(initialMessageState);
     const [message, setMessage] = useState("");

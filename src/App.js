@@ -15,7 +15,6 @@ function App() {
   const {
     ioSocket,
     name,
-    setName,
     joined,
     setJoined,
     currentChat,
@@ -31,6 +30,10 @@ function App() {
     socketRef,
     setNameInputValid
   } = useGlobalContext();
+
+  function handleMessagechange(e) {
+    setMessage(e.target.value);
+  }
 
   function sendMessage() {
     const payload = {
@@ -48,6 +51,7 @@ function App() {
       });
     });
     setMessages(newMessages);
+    setMessage('')
   }
 
   function roomJoinCallback(incomingMessages, room) {
@@ -74,13 +78,14 @@ function App() {
       setMessages(newMessages);
     }
     setCurrentChat(currentChat);
+    // console.log(currentChat)
   }
 
   function connect() {
     if(name.trim() !== "") {
       socketRef.current = io.connect("http://localhost:4000");
       socketRef.current.emit("join", name);
-      socketRef.current.emit("join room", "Networking Profissão Programador", (messages) => roomJoinCallback(messages, "Networking Profissão Programador"))
+      socketRef.current.emit("join room", "padrao", (messages) => roomJoinCallback(messages, "padrao"))
       socketRef.current.on("users", allUsers => {
         setUsers(allUsers);
       })
@@ -90,6 +95,19 @@ function App() {
       setNameInputValid(false);
     }
     console.log(socketRef)
+    console.log(name)
+    socketRef.current.on("new message", ({ content, sender, chatName}) => {
+      setMessages(messages => {
+        const newMessages = produce(messages, draft => {
+          if (draft[chatName]) {
+            draft[chatName].push({ content, sender});
+          } else {
+            draft[chatName] = [{ content, sender }];
+          }
+        });
+        return newMessages;
+      })
+    })
   }
 
   if(!joined) {
@@ -103,14 +121,21 @@ function App() {
       <div className='background'></div>
       <div className='chat-container'>
         <Contacts
-          toggleChat={toggleChat}
           yourId={socketRef.current ? socketRef.current.id : ""}
+          currentChat={currentChat}
+          toggleChat={toggleChat}
+          messages={messages[currentChat.chatName]}
         />
 
         <div className='chat-messages'>
           <Messages
+            message={message}
+            handleMessagechange ={handleMessagechange}
             sendMessage={sendMessage}
+            users={users}
             joinRoom={joinRoom}
+            connectedRooms={connectedRooms}
+            currentChat={currentChat}
             messages={messages[currentChat.chatName]}
           />
         </div>

@@ -4,15 +4,13 @@ import CC_Image from '../../assets/images/logo_profissao-programador.jpg';
 import Send_Image from '../../assets/images/send.png';
 import './styles.css';
 
-function Messages() {
+function Messages(props) {
     const {
         ioSocket,
         name,
         currentChat,
-        connectedRooms,
         users,
         message,
-        setMessage,
         messages,
         setMessages,
         getUserColor,
@@ -21,12 +19,47 @@ function Messages() {
     useEffect(() => {
         ioSocket.on("message", (message) => setMessages((messages) => [...messages, message]));
     }, []);
-    
-    function handleMessage() {
-        if(message) {
-            ioSocket.emit("message", { message, name });
-            setMessage("");
-        }
+
+    useEffect(() => {
+        // console.log(currentChat)
+    })
+
+    function renderMessages(message, index) {
+        return (
+            <div className={`user-container-message ${message.sender === name? 'right' : 'left'}`} key={index}>
+                <span
+                    className={message.sender === name? 'user-my-message' : 'user-other-message'}
+                >
+                    <span
+                        className='sender-name'
+                        style={{
+                            color: `${getUserColor(message.sender)}`,
+                            display: props.currentChat.isChannel === false ? 'none' : ''
+                        }}
+                    >
+                        {message.sender === name? '' : `${message.sender}`}
+                    </span>
+                    {message.content}
+                </span>
+            </div>
+        )
+    }
+
+    let body;
+    if(!props.currentChat.isChannel || props.connectedRooms.includes(props.currentChat.chatName)) {
+        body = (
+            <div>
+                {props.messages ? props.messages.map(renderMessages) : <p>FUCK OFF</p>}
+            </div>
+        );
+    } else {
+        body = (
+            <button
+                onClick={() => props.joinRoom(props.currentChat.chatName)}
+            >
+                Join {props.currentChat.chatName}
+            </button>
+        )
     }
 
     return(
@@ -46,19 +79,7 @@ function Messages() {
             </div>
 
             <div className='chat-messages-area'>
-                <div className={`user-container-message ${message.name === name? 'right' : 'left'}`}>
-                    <span
-                        className={message.name === name? 'user-my-message' : 'user-other-message'}
-                    >
-                        <span
-                            className='sender-name'
-                            style={{color: `${getUserColor(message.name)}`}}
-                        >
-                            {message.name === name? '' : `${message.name}`}
-                        </span>
-                        {message.message}
-                    </span>
-                </div>
+                {body}
             </div>
 
             <div className='chat-input-area'>
@@ -66,14 +87,14 @@ function Messages() {
                     className='chat-input'
                     placeholder='Mensagem'
                     value={message}
-                    onChange={(e) => setMessage(e.target.value)}
+                    onChange={props.handleMessagechange}
                     onKeyDown={(e) => {
                         if(e.key === "Enter") {
-                            handleMessage();
+                            props.sendMessage();
                         }
                     }}
                 />
-                <img className='send-message-icon' src={Send_Image} alt='' onClick={handleMessage} />
+                <img className='send-message-icon' src={Send_Image} alt='' onClick={props.sendMessage} />
             </div>
         </>
     )

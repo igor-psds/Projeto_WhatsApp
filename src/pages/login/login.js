@@ -38,7 +38,7 @@ function Login(props) {
                     onChange={(e) => setName(e.target.value)}
                     onKeyDown={(e) => {
                         if(e.key === "Enter") {
-                            props.connect;
+                            props.connect()
                         }
                     }}
                 />

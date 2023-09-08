@@ -4,14 +4,20 @@ import CC_Image from '../../assets/images/logo_profissao-programador.jpg'
 import './styles.css';
 
 const rooms = [
-    "Networking Profissão Programador"
+    "padrao"
 ];
 
 function Contacts(props) {
     const {
         users,
         messages,
+        getUserColor
     } = useGlobalContext();
+
+    // const lastIndex = props.messages.length - 1;
+    // const lastMessage = props.messages[lastIndex];
+    // console.log(lastMessage.sender)
+    // console.log(lastMessage.content)
 
     function renderRooms(room) {
         const currentChat = {
@@ -20,12 +26,12 @@ function Contacts(props) {
             receiverId: ""
         }
         return(
-            <div className='chat-item' onClick={() => props.toggleChat(currentChat)} key={room}>
+            <div className={`chat-item ${currentChat.chatName === props.currentChat.chatName? 'active' : ''}`} onClick={() => props.toggleChat(currentChat)} key={room}>
                 <img className='image-profile' src={CC_Image} alt='' />
                 <div className='title-chat-container'>
                     <span className='title-message'>{room}</span>
                     <span className='last-message'>
-                        {messages.length? `${messages[messages.length - 1].name}: ${messages[messages.length - 1].message}` : ''}
+                        {/* {props.messages.length? `${lastMessage.sender}: ${lastMessage.content}` : ''} */}
                     </span>
                 </div>
             </div>
@@ -36,11 +42,11 @@ function Contacts(props) {
         if(user.id === props.yourId) {
             return(
                 <div className='chat-item' onClick={myChat} key={user.id}>
-                    <img className='image-profile' src={CC_Image} alt='' />
+                    <div className='user-image' style={{ backgroundColor: `${getUserColor(user.name)}` }} alt=''>{user.name[0]}</div>
                     <div className='title-chat-container'>
                         <span className='title-message'>You: {user.name}</span>
                         <span className='last-message'>
-                            {messages.length? `${messages[messages.length - 1].name}: ${messages[messages.length - 1].message}` : ''}
+                            {/* {messages.length? `${messages[messages.length - 1].name}: ${messages[messages.length - 1].message}` : ''} */}
                         </span>
                     </div>
                 </div>
@@ -61,8 +67,8 @@ function Contacts(props) {
             props.toggleChat(currentChat)
         }
         return(
-            <div className='chat-item' onClick={() => changeChat()} key={user.id}>
-                <img className='image-profile' src={CC_Image} alt='' />
+            <div className={`chat-item ${currentChat.chatName === props.currentChat.chatName? 'active' : ''}`} onClick={() => changeChat()} key={user.id}>
+                <div className='user-image' style={{ backgroundColor: `${getUserColor(user.name)}` }} alt=''>{user.name[0]}</div>
                 <div className='title-chat-container'>
                     <span className='title-message'>{user.name}</span>
                     <span className='last-message'>
