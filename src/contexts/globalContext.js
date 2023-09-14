@@ -8,13 +8,13 @@ function GlobalProvider({ children }) {
     const ioSocket = socket('http://localhost:4000');
 
     const initialMessageState = {
-        padrao: []
+        npp: []
     }
 
     const [name, setName] = useState('');
     const [joined, setJoined] = useState(false);
-    const [currentChat, setCurrentChat] = useState({ isChannel: true, chatName: "padrao", receiverId: ""});
-    const [connectedRooms, setConnectedRooms] = useState(["padrao"]);
+    const [currentChat, setCurrentChat] = useState({ isChannel: true, chatName: "npp", receiverId: ""});
+    const [connectedRooms, setConnectedRooms] = useState(["npp"]);
     const [users, setUsers] = useState([]);
     const [messages, setMessages] = useState(initialMessageState);
     const [message, setMessage] = useState("");

@@ -8,7 +8,7 @@ import { produce } from 'immer';
 import io from 'socket.io-client';
 
 const initialMessageState = {
-  padrao: []
+  npp: []
 }
 
 function App() {
@@ -85,7 +85,7 @@ function App() {
     if(name.trim() !== "") {
       socketRef.current = io.connect("http://localhost:4000");
       socketRef.current.emit("join", name);
-      socketRef.current.emit("join room", "padrao", (messages) => roomJoinCallback(messages, "padrao"))
+      socketRef.current.emit("join room", "npp", (messages) => roomJoinCallback(messages, "npp"))
       socketRef.current.on("users", allUsers => {
         setUsers(allUsers);
       })

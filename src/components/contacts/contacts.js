@@ -4,7 +4,7 @@ import CC_Image from '../../assets/images/logo_profissao-programador.jpg'
 import './styles.css';
 
 const rooms = [
-    "padrao"
+    "npp"
 ];
 
 function Contacts(props) {
